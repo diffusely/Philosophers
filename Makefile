@@ -1,16 +1,14 @@
 NAME 		= philo
 
-LIBFT		= lib/libft/
 INCLUDES	= includes
 SRC_DIR		= src/
 
-SRC			= main.c 
+SRC			= main.c $(SRC_DIR)utils.c
 
 OBJ			= $(SRC:%.c=%.o)
 
-LIB_FLAGS	= -L$(LIBFT) -lft
-IFLAG		= -I$(INCLUDES) -I$(LIBFT)
-CFLAG		= -Wall -Wextra -Werror
+IFLAG		= -I$(INCLUDES)
+CFLAG		= #-Wall -Wextra -Werror
  
 CC			= cc
 RM			= rm -rf
@@ -22,19 +20,15 @@ all:				$(NAME)
 					$(CC) -c $(CFLAG) $(IFLAG) -I/usr/include -O3 -c $< -o $(<:.c=.o)
 
 $(NAME):			$(OBJ)
-					make -C $(LIBFT)
-					$(CC) $(CFLAG) $(OBJ) $(LIB_FLAGS) -o $(NAME)
+					$(CC) $(CFLAG) $(OBJ) -o $(NAME)
 
 bonus:				$(BOBJ)
-					make -C $(LIBFT)
-					$(CC) $(CFLAG) $(BOBJ) $(LIB_FLAGS) -o $(NAME)
+					$(CC) $(CFLAG) $(BOBJ) -o $(NAME)
 
 clean:				
-					make -C $(LIBFT) clean
-					$(RM) $(OBJ) $(BOBJ)
+					$(RM) $(OBJ)
 
 fclean: 			clean
-					make -C $(LIBFT) fclean
 					$(RM) $(NAME)
 
 re:					fclean all

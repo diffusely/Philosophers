@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 01:31:21 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/10 01:34:32 by noavetis         ###   ########.fr       */
+/*   Created: 2025/08/06 17:11:50 by noavetis          #+#    #+#             */
+/*   Updated: 2025/08/06 18:40:36 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef PHILO_H
+# define PHILO_H
 
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	int	i;
+# include "libft.h"
+# include "printf.h"
 
-	i = 0;
-	while (s1[i] && s2[i])
-	{
-		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
-		++i;
-	}
-	return (s1[i] - s2[i]);
-}
+
+long	ft_atoi(const char *str);
+int		ft_isalpha(int c);
+
+#endif
