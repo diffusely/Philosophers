@@ -1,35 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/06 15:24:19 by noavetis          #+#    #+#             */
-/*   Updated: 2025/08/07 21:54:42 by noavetis         ###   ########.fr       */
+/*   Created: 2025/08/07 21:19:27 by noavetis          #+#    #+#             */
+/*   Updated: 2025/08/07 21:48:04 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int main(int argc, char **argv)
+void	free_all(t_manag *manag, int flag)
 {
-	t_manag	manag;
+	int	i;
 
-	if (argc < 5 || argc > 6)
+	i = 0;
+	if (manag->philos)
 	{
-		printf("Invalid arguments!\n");
-		return (-1);
+		while (i < manag->philo_count)
+			pthread_mutex_destroy(&manag->forks[i++]);
+		free(manag->philos);
+		manag->philos = NULL;
 	}
-	if (!valid_input(argc, argv) || !valid_num(argc, argv))
+	if (flag)
+		pthread_mutex_destroy(&manag->print);
+	if (manag->forks)
 	{
-		printf("Invalid input!\n");
-		return (-1);
+		free(manag->forks);
+		manag->forks = NULL;
 	}
-	if (!init_all(&manag, argc, argv))
-		return (-1);
-	
-	free_all(&manag, 1);
-	return (0);
 }
-
