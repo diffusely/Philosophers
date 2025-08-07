@@ -3,7 +3,9 @@ NAME 		= philo
 INCLUDES	= includes
 SRC_DIR		= src/
 
-SRC			= main.c $(SRC_DIR)utils.c
+SRC			= main.c \
+			  $(SRC_DIR)utils.c \
+			  $(SRC_DIR)valid.c
 
 OBJ			= $(SRC:%.c=%.o)
 

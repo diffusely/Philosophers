@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 18:30:40 by noavetis          #+#    #+#             */
-/*   Updated: 2025/08/06 18:38:50 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/08/07 15:52:03 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "phlo.h"
+#include "philo.h"
 
 long	ft_atoi(const char *str)
 {
@@ -34,4 +34,11 @@ long	ft_atoi(const char *str)
 		str++;
 	}
 	return (num * sign);
+}
+
+int	ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
 }

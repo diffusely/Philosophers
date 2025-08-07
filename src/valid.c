@@ -1,38 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   valid.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/06 15:24:19 by noavetis          #+#    #+#             */
-/*   Updated: 2025/08/07 16:13:16 by noavetis         ###   ########.fr       */
+/*   Created: 2025/08/07 15:52:05 by noavetis          #+#    #+#             */
+/*   Updated: 2025/08/07 15:53:04 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// 1 - number phlo
-// 2 - time to die
-// 3 - time to sleep
-// 4 - time to think
-// 5 - must eat
-
-// (ms) (number philo) (state)
-int main(int argc, char **argv)
+bool	valid_input(int argc, char **argv)
 {
-	t_philo	*philos;
+	int	i;
+	int	j;
 
-	if (argc < 5 || argc > 6)
+	if (!argv)
+		return (false);
+	i = 1;
+	while (i < argc)
 	{
-		printf("Invalid arguments!\n");
-		return (-1);
+		j = 0;
+		if (!argv[i][j])
+			return (false);
+		while (argv[i][j])
+		{
+			if (!ft_isdigit(argv[i][j]))
+				return (false);
+			++j;
+		}
+		++i;
 	}
-	if (!valid_input(argc, argv))
-	{
-		printf("Invalid input!\n");
-		return (-1);
-	}
-	return (0);
+	return (true);
 }
 
+bool	valid_num(int argc, char **argv)
+{
+	
+}
