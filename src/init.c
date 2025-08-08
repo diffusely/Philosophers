@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:17:02 by noavetis          #+#    #+#             */
-/*   Updated: 2025/08/07 21:56:15 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/08/07 22:25:25 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ static void	init_philo(t_manag *manag)
 	{
 		manag->philos[i].id = i + 1;
 		manag->philos[i].meal_eaten = 0;
-		manag->philos[i].left_fork = &manag->forks[i];
-		manag->philos[i].right_fork = &manag->forks[(i + 1) % manag->philo_count];
+		manag->philos[i].l_fork = &manag->forks[i];
+		manag->philos[i].r_fork = &manag->forks[(i + 1) % manag->philo_count];
 		++i;
 	}
 }

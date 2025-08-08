@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:11:50 by noavetis          #+#    #+#             */
-/*   Updated: 2025/08/07 21:52:21 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/08/07 22:26:22 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ typedef struct s_philo
 	int				meal_eaten;
 
 	pthread_t		thread;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*l_fork;
+	pthread_mutex_t	*r_fork;
 }	t_philo;
 
 typedef struct s_manag
@@ -60,5 +60,8 @@ void	free_all(t_manag *manag, int flag);
 
 // init
 bool	init_all(t_manag *manag, int argc, char **argv);
+
+// time
+void	time_ms(void);
 
 #endif
