@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:11:50 by noavetis          #+#    #+#             */
-/*   Updated: 2025/08/07 22:26:22 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/11/08 22:42:23 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,17 @@
 # define SLEEP 2
 # define MUST_EAT 3
 
+typedef struct s_manag	t_manag;
+
 typedef struct s_philo
 {
 	int				id;
 	int				meal_eaten;
-
+	long long		last_meal;
+	
+	t_manag			*manag;
+	pthread_mutex_t	meal;
+	
 	pthread_t		thread;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
@@ -40,10 +46,12 @@ typedef struct s_manag
 	int				philo_count;
 	int				args_time[4];
 	int				someone_died;
-	long			start_time;
+	long long		start_time;
 
 	pthread_mutex_t	*forks;
+	
 	pthread_mutex_t	print;
+	pthread_mutex_t	death;
 	t_philo			*philos;
 }	t_manag;
 
@@ -62,6 +70,10 @@ void	free_all(t_manag *manag, int flag);
 bool	init_all(t_manag *manag, int argc, char **argv);
 
 // time
-void	time_ms(void);
+long	time_ms(void);
+
+// philo
+void	*philo_routine(void *arg);
+void	print_fork_taken(t_philo *philo, const char *type);
 
 #endif

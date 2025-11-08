@@ -7,7 +7,8 @@ SRC			= main.c \
 			  $(SRC_DIR)utils.c \
 			  $(SRC_DIR)valid.c \
 			  $(SRC_DIR)free.c \
-			  $(SRC_DIR)init.c
+			  $(SRC_DIR)init.c \
+			  $(SRC_DIR)philo.c 
 
 OBJ			= $(SRC:%.c=%.o)
 

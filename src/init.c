@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:17:02 by noavetis          #+#    #+#             */
-/*   Updated: 2025/08/07 22:25:25 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/11/08 23:05:25 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,12 @@ static bool	init_manag(t_manag *manag, int argc, char **argv)
 	manag->start_time = 0;
 	manag->philos = malloc(sizeof(t_philo) * (manag->philo_count));
 	if (!manag->philos)
-	{
-		printf("Bad alloc for philos!\n");
-		return (false);
-	}
+		return (printf("Bad alloc for philos!\n"), false);
 	manag->forks = malloc(sizeof(pthread_mutex_t) * manag->philo_count);
 	if (!manag->forks)
 	{
 		free(manag->philos);
-		printf("Bad alloc for forks!\n");
-		return (false);
+		return (printf("Bad alloc for forks!\n"), false);
 	}
 	return (true);
 }
@@ -49,10 +45,29 @@ static void	init_philo(t_manag *manag)
 	{
 		manag->philos[i].id = i + 1;
 		manag->philos[i].meal_eaten = 0;
+		manag->philos[i].last_meal = time_ms();
+		manag->philos[i].manag = manag;
 		manag->philos[i].l_fork = &manag->forks[i];
 		manag->philos[i].r_fork = &manag->forks[(i + 1) % manag->philo_count];
 		++i;
 	}
+	i = 0;
+	manag->start_time = time_ms();
+	
+	while (i < manag->philo_count)
+	{
+		pthread_create(&manag->philos[i].thread, NULL, philo_routine, 
+								&manag->philos[i]);
+		++i;
+	}
+
+	i = 0;
+	while (i < manag->philo_count)
+	{
+		pthread_join(manag->philos[i].thread, NULL);
+		++i;
+	}
+
 }
 
 static bool	init_forks(t_manag *manag)
