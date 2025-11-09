@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:17:02 by noavetis          #+#    #+#             */
-/*   Updated: 2025/11/08 23:05:25 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/11/09 18:59:17 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,28 @@ static void	init_philo(t_manag *manag)
 		manag->philos[i].manag = manag;
 		manag->philos[i].l_fork = &manag->forks[i];
 		manag->philos[i].r_fork = &manag->forks[(i + 1) % manag->philo_count];
+		pthread_mutex_init(&manag->philos[i].meal, NULL);
 		++i;
 	}
 	i = 0;
 	manag->start_time = time_ms();
+	while (i < manag->philo_count)
+	{
+		manag->philos[i].last_meal = manag->start_time;
+		++i;
+	}
 	
+	i = 0;
 	while (i < manag->philo_count)
 	{
 		pthread_create(&manag->philos[i].thread, NULL, philo_routine, 
 								&manag->philos[i]);
 		++i;
 	}
-
+	
 	i = 0;
+	pthread_create(&manag->checker, NULL, check, manag);
+	pthread_join(manag->checker, NULL);
 	while (i < manag->philo_count)
 	{
 		pthread_join(manag->philos[i].thread, NULL);
@@ -91,6 +100,12 @@ static bool	init_forks(t_manag *manag)
 	if (pthread_mutex_init(&manag->print, NULL) != 0)
 	{
 		printf("Print mutex init failed\n");
+		free_all(manag, 0);
+		return (false);
+	}
+	if (pthread_mutex_init(&manag->death, NULL) != 0)
+	{
+		printf("Death mutex init failed\n");
 		free_all(manag, 0);
 		return (false);
 	}

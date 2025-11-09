@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:11:50 by noavetis          #+#    #+#             */
-/*   Updated: 2025/11/08 22:42:23 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/11/09 17:17:18 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_manag
 	
 	pthread_mutex_t	print;
 	pthread_mutex_t	death;
+	pthread_t		checker;
 	t_philo			*philos;
 }	t_manag;
 
@@ -74,6 +75,8 @@ long	time_ms(void);
 
 // philo
 void	*philo_routine(void *arg);
+void	*check(void *arg);
 void	print_fork_taken(t_philo *philo, const char *type);
+void*	check(void* arg);
 
 #endif
