@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:11:50 by noavetis          #+#    #+#             */
-/*   Updated: 2025/11/09 17:17:18 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/11/14 22:42:34 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_manag
 	int				philo_count;
 	int				args_time[4];
 	int				someone_died;
+	int				died_count;
 	long long		start_time;
 
 	pthread_mutex_t	*forks;
@@ -72,6 +73,7 @@ bool	init_all(t_manag *manag, int argc, char **argv);
 
 // time
 long	time_ms(void);
+void	ft_usleep(long long ms);
 
 // philo
 void	*philo_routine(void *arg);

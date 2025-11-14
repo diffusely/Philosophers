@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 22:28:17 by noavetis          #+#    #+#             */
-/*   Updated: 2025/11/09 19:03:13 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/11/14 22:54:14 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	print_msg(t_philo *philo, char *message, long long time)
+{
+	time = time - philo->manag->start_time;
+	pthread_mutex_lock(&philo->manag->print);
+	if (!philo->manag->someone_died)
+		printf("%lld %d %s",
+				time, 
+				philo->id,
+				message);
+	pthread_mutex_unlock(&philo->manag->print);
+}
 
 void	philo_eat(t_philo *philo)
 {
@@ -31,46 +43,18 @@ void	philo_eat(t_philo *philo)
 		pthread_mutex_lock(philo->r_fork);
 		print_fork_taken(philo, "right");
 	}
-	
-	pthread_mutex_lock(&philo->meal);
-
-
-
-	++(philo->meal_eaten);
-	philo->last_meal = time_ms();
-
-	
-	pthread_mutex_unlock(&philo->meal);
-	
-	if (!philo->manag->someone_died)
-		printf("%lld %d is eating\n", time_ms() - philo->manag->start_time, philo->id);
-	usleep(philo->manag->args_time[EAT] * 1000);
-	
-	pthread_mutex_unlock(philo->l_fork);
-	pthread_mutex_unlock(philo->r_fork);
 }
 
 void	print_fork_taken(t_philo *philo, const char *type)
 {
+	long long	time;
+
+	time = time_ms() - philo->manag->start_time;
+	pthread_mutex_lock(&philo->manag->print);
 	if (!philo->manag->someone_died)
 		printf("%lld %d has taken a %s fork\n", 
-			time_ms() - philo->manag->start_time, philo->id, type);
-}
-
-
-void	philo_sleep(t_philo *philo)
-{
-	if (!philo->manag->someone_died)
-		printf("%lld %d is sleeping\n", 
-			time_ms() - philo->manag->start_time, philo->id);
-	usleep(philo->manag->args_time[SLEEP] * 1000);
-}
-
-void	philo_think(t_philo *philo)
-{
-	if (!philo->manag->someone_died)
-		printf("%lld %d is thinking\n", 
-			time_ms() - philo->manag->start_time, philo->id);
+			time, philo->id, type);
+	pthread_mutex_unlock(&philo->manag->print);
 }
 
 bool philo_is_dead(t_philo *philo, int flag)
@@ -87,7 +71,8 @@ bool philo_is_dead(t_philo *philo, int flag)
 
 void	*philo_routine(void *arg)
 {
-	t_philo	*philo;
+	t_philo		*philo;
+	long long	ms;
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
@@ -95,8 +80,19 @@ void	*philo_routine(void *arg)
 	while (!philo->manag->someone_died)
 	{
 		philo_eat(philo);
-		philo_sleep(philo);
-		philo_think(philo);
+		pthread_mutex_lock(&philo->meal);
+		philo->last_meal = time_ms();
+		pthread_mutex_unlock(&philo->meal);
+		print_msg(philo, "is eating\n", time_ms());
+		ft_usleep(philo->manag->args_time[EAT]);
+		pthread_mutex_unlock(philo->l_fork);
+		pthread_mutex_unlock(philo->r_fork);
+		++(philo->meal_eaten);
+		ms = time_ms();
+		print_msg(philo, "is sleeping\n", ms);
+		ft_usleep(philo->manag->args_time[SLEEP]);
+		ms = time_ms();
+		print_msg(philo, "is thinking\n", ms);
 	}
 	return (NULL);
 }
@@ -105,6 +101,7 @@ void	*check(void *arg)
 {
 	t_manag	*manag;
 	int		i;
+	
 
 	manag = (t_manag *)arg;
 	while (!manag->someone_died)
@@ -116,12 +113,10 @@ void	*check(void *arg)
 			if (philo_is_dead(&manag->philos[i], 1))
 			{
 				pthread_mutex_lock(&manag->death);
-				if (!manag->someone_died)
-				{
-					manag->someone_died = 1;
-					printf("%lld %d died\n", time_ms() - manag->start_time, manag->philos[i].id);
-				}
+				print_msg(manag->philos, "died\n", time_ms());
+				manag->someone_died = 1;
 				pthread_mutex_unlock(&manag->death);
+				
 				pthread_mutex_unlock(&manag->philos[i].meal);
 				return (NULL);
 			}
@@ -137,7 +132,7 @@ void	*check(void *arg)
 			pthread_mutex_unlock(&manag->philos[i].meal);
 			i++;
 		}
-		usleep(1000);
+		usleep(300);
 	}
 	return (NULL);
 }

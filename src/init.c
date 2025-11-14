@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:17:02 by noavetis          #+#    #+#             */
-/*   Updated: 2025/11/09 18:59:17 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/11/14 22:42:49 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ static bool	init_manag(t_manag *manag, int argc, char **argv)
 		manag->args_time[MUST_EAT] = -1;
 	manag->someone_died = 0;
 	manag->start_time = 0;
+	manag->died_count = 0;
 	manag->philos = malloc(sizeof(t_philo) * (manag->philo_count));
+	pthread_mutex_init(&manag->print, NULL);
 	if (!manag->philos)
 		return (printf("Bad alloc for philos!\n"), false);
 	manag->forks = malloc(sizeof(pthread_mutex_t) * manag->philo_count);
