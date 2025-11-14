@@ -6,7 +6,7 @@
 /*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:17:02 by noavetis          #+#    #+#             */
-/*   Updated: 2025/11/14 22:42:49 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/11/14 23:42:03 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static void	init_philo(t_manag *manag)
 		manag->philos[i].meal_eaten = 0;
 		manag->philos[i].last_meal = time_ms();
 		manag->philos[i].manag = manag;
+		manag->philos[i].dead = 0;
 		manag->philos[i].l_fork = &manag->forks[i];
 		manag->philos[i].r_fork = &manag->forks[(i + 1) % manag->philo_count];
 		pthread_mutex_init(&manag->philos[i].meal, NULL);
@@ -61,7 +62,6 @@ static void	init_philo(t_manag *manag)
 		manag->philos[i].last_meal = manag->start_time;
 		++i;
 	}
-	
 	i = 0;
 	while (i < manag->philo_count)
 	{
@@ -69,7 +69,6 @@ static void	init_philo(t_manag *manag)
 								&manag->philos[i]);
 		++i;
 	}
-	
 	i = 0;
 	pthread_create(&manag->checker, NULL, check, manag);
 	pthread_join(manag->checker, NULL);

@@ -6,7 +6,7 @@
 /*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:11:50 by noavetis          #+#    #+#             */
-/*   Updated: 2025/11/14 22:42:34 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/11/14 23:13:44 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_philo
 {
 	int				id;
 	int				meal_eaten;
+	int				dead;
 	long long		last_meal;
 	
 	t_manag			*manag;
