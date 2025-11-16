@@ -6,14 +6,13 @@ SRC_DIR		= src/
 SRC			= main.c \
 			  $(SRC_DIR)utils.c \
 			  $(SRC_DIR)valid.c \
-			  $(SRC_DIR)free.c \
 			  $(SRC_DIR)init.c \
 			  $(SRC_DIR)philo.c 
 
 OBJ			= $(SRC:%.c=%.o)
 
 IFLAG		= -I$(INCLUDES)
-CFLAG		= #-Wall -Wextra -Werror
+CFLAG		= -Wall -Wextra -Werror
  
 CC			= cc
 RM			= rm -rf

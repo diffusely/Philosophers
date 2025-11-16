@@ -6,7 +6,7 @@
 /*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 18:30:40 by noavetis          #+#    #+#             */
-/*   Updated: 2025/11/14 22:31:00 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/11/16 19:55:23 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,25 @@ void	ft_usleep(long long ms)
 	start = time_ms();
 	while ((time_ms() - start) < ms)
 		usleep(50);
+}
+
+void	free_all(t_manag *manag, int flag)
+{
+	int	i;
+
+	i = 0;
+	if (manag->philos)
+	{
+		while (i < manag->philo_count)
+			pthread_mutex_destroy(&manag->forks[i++]);
+		free(manag->philos);
+		manag->philos = NULL;
+	}
+	if (flag)
+		pthread_mutex_destroy(&manag->print);
+	if (manag->forks)
+	{
+		free(manag->forks);
+		manag->forks = NULL;
+	}
 }

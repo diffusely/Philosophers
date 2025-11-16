@@ -6,7 +6,7 @@
 /*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 17:17:02 by noavetis          #+#    #+#             */
-/*   Updated: 2025/11/14 23:42:03 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/11/16 20:24:01 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ static bool	init_manag(t_manag *manag, int argc, char **argv)
 	return (true);
 }
 
-static void	init_philo(t_manag *manag)
+static void	help_philo(t_manag *manag)
 {
 	int	i;
 
-	i = 0;
-	while (i < manag->philo_count)
+	i = -1;
+	while (++i < manag->philo_count)
 	{
 		manag->philos[i].id = i + 1;
 		manag->philos[i].meal_eaten = 0;
@@ -53,31 +53,27 @@ static void	init_philo(t_manag *manag)
 		manag->philos[i].l_fork = &manag->forks[i];
 		manag->philos[i].r_fork = &manag->forks[(i + 1) % manag->philo_count];
 		pthread_mutex_init(&manag->philos[i].meal, NULL);
-		++i;
 	}
-	i = 0;
+}
+
+static void	init_philo(t_manag *manag)
+{
+	int	i;
+
+	help_philo(manag);
+	i = -1;
 	manag->start_time = time_ms();
-	while (i < manag->philo_count)
-	{
+	while (++i < manag->philo_count)
 		manag->philos[i].last_meal = manag->start_time;
-		++i;
-	}
-	i = 0;
-	while (i < manag->philo_count)
-	{
-		pthread_create(&manag->philos[i].thread, NULL, philo_routine, 
-								&manag->philos[i]);
-		++i;
-	}
-	i = 0;
+	i = -1;
+	while (++i < manag->philo_count)
+		pthread_create(&manag->philos[i].thread, NULL, philo_routine,
+			&manag->philos[i]);
+	i = -1;
 	pthread_create(&manag->checker, NULL, check, manag);
 	pthread_join(manag->checker, NULL);
-	while (i < manag->philo_count)
-	{
+	while (++i < manag->philo_count)
 		pthread_join(manag->philos[i].thread, NULL);
-		++i;
-	}
-
 }
 
 static bool	init_forks(t_manag *manag)
@@ -92,33 +88,41 @@ static bool	init_forks(t_manag *manag)
 			printf("Mutex init failed\n");
 			while (--i >= 0)
 				pthread_mutex_destroy(&manag->forks[i]);
-			free(manag->forks);
-			free(manag->philos);
-			return (false);
+			return (free(manag->forks), free(manag->philos), false);
 		}
 	}
 	i = 0;
 	if (pthread_mutex_init(&manag->print, NULL) != 0)
 	{
 		printf("Print mutex init failed\n");
-		free_all(manag, 0);
-		return (false);
+		return (free_all(manag, 0), false);
 	}
 	if (pthread_mutex_init(&manag->death, NULL) != 0)
 	{
 		printf("Death mutex init failed\n");
-		free_all(manag, 0);
-		return (false);
+		return (free_all(manag, 0), false);
 	}
 	return (true);
 }
 
 bool	init_all(t_manag *manag, int argc, char **argv)
 {
+	long long	time;
+
 	if (!init_manag(manag, argc, argv))
 		return (false);
 	if (!init_forks(manag))
 		return (false);
-	init_philo(manag);
+	time = 0;
+	if (manag->philo_count == 1)
+	{
+		printf("0 1 has taken a left fork\n");
+		time = time_ms();
+		ft_usleep(manag->args_time[DIE]);
+		time = time_ms() - time;
+		printf("%lld 1 died\n", time);
+	}
+	else
+		init_philo(manag);
 	return (true);
 }
